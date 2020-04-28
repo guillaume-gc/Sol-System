@@ -7,7 +7,10 @@ public class OrbitalCamera : MonoBehaviour
     public Camera mainCamera;
     public GameObject localCamRef;
     public GameObject centerCamRef;
+
     public int zoomSpeed = 50;
+    public float cameraSpeedH = 2.0f;
+    public float cameraSpeedV = 2.0f;
 
     private bool camIsFocused;
 
@@ -22,19 +25,7 @@ public class OrbitalCamera : MonoBehaviour
     {
         if (camIsFocused)
         {
-            // Zoom with mouse wheel (if not too close)
-            float scrollWheelAxis = Input.GetAxis("Mouse ScrollWheel");
-            if (scrollWheelAxis != 0 &&
-                !(mainCamera.transform.localPosition.z < 1.5 && Input.GetAxis("Mouse ScrollWheel") > 0))
-            {
-                Debug.Log("Mouse ScrollWheel " + Input.GetAxis("Mouse ScrollWheel") + " local position z " + mainCamera.transform.localPosition.z);
-                mainCamera.transform.Translate(0, 0, Input.GetAxis("Mouse ScrollWheel") * zoomSpeed);
-            }
-
-            if (centerCamRef != null)
-            {
-                mainCamera.transform.LookAt(centerCamRef.transform);
-            }
+            FocusedEvent();
         }
     }
 
@@ -49,15 +40,32 @@ public class OrbitalCamera : MonoBehaviour
 
             mainCamera.transform.localPosition = new Vector3(0f, 0f, 2f);
 
-            if (centerCamRef != null)
-            {
-                mainCamera.transform.LookAt(centerCamRef.transform);
-            }
+            mainCamera.transform.LookAt(localCamRef.transform);
         }
     }
 
     private void FocusedEvent()
     {
+        // Zoom with mouse wheel (if not too close)
+        float scrollWheelAxis = Input.GetAxis("Mouse ScrollWheel");
 
+        if (scrollWheelAxis != 0 &&
+            !(mainCamera.transform.localPosition.z < 1.5 && scrollWheelAxis > 0))
+        {
+            Debug.Log("Mouse ScrollWheel " + Input.GetAxis("Mouse ScrollWheel") + " local position z " + mainCamera.transform.localPosition.z);
+            mainCamera.transform.Translate(0, 0, Input.GetAxis("Mouse ScrollWheel") * zoomSpeed);
+        }
+
+        if (Input.GetMouseButton(1))
+        {
+            // Move mouse
+            float mouseXAxis = Input.GetAxis("Mouse X");
+            float mouseYAxis = Input.GetAxis("Mouse Y");
+
+            Debug.Log("Mouse Right Button Down X Axis " + mouseXAxis + " Y Axis " + mouseYAxis);
+
+            mainCamera.transform.Translate(-mouseXAxis, -mouseYAxis, 0);
+            mainCamera.transform.LookAt(localCamRef.transform);
+        }
     }
 }
