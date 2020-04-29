@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FocusManager : MonoBehaviour
 {
-    public int zoomSpeed = 50;
+    public int zoomSpeed = 10;
     public float cameraSpeedH = 2.0f;
     public float cameraSpeedV = 2.0f;
 
@@ -39,7 +39,7 @@ public class FocusManager : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             string hitObjectName = hit.collider.gameObject.name;
-            string camRefName = hitObjectName + "CamRef";
+            string camRefName = hitObjectName + "Center";
 
             // Did the user click on a body (planet, moon, etc...)?
             if (hit.collider.gameObject.CompareTag("Body"))
@@ -68,8 +68,7 @@ public class FocusManager : MonoBehaviour
         // Zoom with mouse wheel (if not too close)
         float scrollWheelAxis = Input.GetAxis("Mouse ScrollWheel");
 
-        if (scrollWheelAxis != 0 &&
-            !(transform.localPosition.z < 1.5 && scrollWheelAxis > 0))
+        if (scrollWheelAxis != 0)
         {
             //Debug.Log("Mouse ScrollWheel " + Input.GetAxis("Mouse ScrollWheel") + " local position z " + transform.localPosition.z);
             transform.Translate(0, 0, Input.GetAxis("Mouse ScrollWheel") * zoomSpeed);

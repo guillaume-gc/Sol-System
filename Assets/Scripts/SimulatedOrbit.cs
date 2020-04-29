@@ -4,18 +4,30 @@ using UnityEngine;
 
 public class SimulatedOrbit : MonoBehaviour
 {
-    private Vector3 rotationTarget = new Vector3(0f, 0f, 0f);
+    public GameObject rotateFrom;
+    public GameObject center;
+    public float orbitSpeed = 20f;
+    public float orbitXAxis = 0f;
+    public float orbitYAxis = 1f;
+    public float orbitZAxis = 0f;
 
-    // Start is called before the first frame update
+    private Vector3 rotateFromLocation;
+    private Vector3 distanceFromCenter;
+
     void Start()
     {
-
+        rotateFromLocation = rotateFrom.transform.position;
+        distanceFromCenter = transform.position - rotateFromLocation;
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        // Spin the object around the world origin at 10 degrees/second.
-        transform.RotateAround(rotationTarget, Vector3.up, 20 * Time.deltaTime);
+        rotateFromLocation = rotateFrom.transform.position;
+
+        // Spin the object around the world origin at orbitSpeed - 10 degrees/second.
+        transform.RotateAround(rotateFromLocation, new Vector3(orbitXAxis, orbitYAxis, orbitZAxis), orbitSpeed * Time.deltaTime);
+
+        // The behavior is repeted for the object center (the object rotate, but not its center)
+        center.transform.position = transform.position;
     }
 }
