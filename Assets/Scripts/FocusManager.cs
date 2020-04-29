@@ -7,6 +7,8 @@ public class FocusManager : MonoBehaviour
     public int zoomSpeed = 10;
     public float cameraSpeedX = 1.0f;
     public float cameraSpeedY = 1.0f;
+    public GameObject defaultBody;
+    public GameObject defaultBodyCamref;
 
     private GameObject currentBodyCamRef;
     private GameObject currentBody;
@@ -16,7 +18,19 @@ public class FocusManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        isFocused = false;
+        if (defaultBody != null && defaultBodyCamref != null)
+        {
+            transform.parent = defaultBodyCamref.transform;
+
+            transform.localPosition = new Vector3(0f, 0f, 2f);
+
+            transform.LookAt(defaultBodyCamref.transform);
+
+            isFocused = true;
+
+            currentBodyCamRef = defaultBodyCamref;
+            currentBody = defaultBody;
+        }
     }
 
     // Update is called once per frame
