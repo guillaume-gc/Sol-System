@@ -5,10 +5,11 @@ using UnityEngine;
 public class FocusManager : MonoBehaviour
 {
     public int zoomSpeed = 10;
-    public float cameraSpeedH = 2.0f;
-    public float cameraSpeedV = 2.0f;
+    public float cameraSpeedX = 1.0f;
+    public float cameraSpeedY = 1.0f;
 
     private GameObject currentBodyCamRef;
+    private GameObject currentBody;
 
     private bool isFocused;
 
@@ -47,6 +48,7 @@ public class FocusManager : MonoBehaviour
                
                 Debug.Log("Clicked on " + hitObjectName);
                 currentBodyCamRef = GameObject.Find(camRefName);
+                currentBody = GameObject.Find(hitObjectName);
 
                 transform.parent = currentBodyCamRef.transform;
 
@@ -76,9 +78,11 @@ public class FocusManager : MonoBehaviour
         // Mouse right button, used to rotate camera around object.
         else if (Input.GetMouseButton(1))
         {
+            Vector3 bodyScale = currentBody.transform.lossyScale;
+
             // Move mouse
-            float mouseXAxis = Input.GetAxis("Mouse X");
-            float mouseYAxis = Input.GetAxis("Mouse Y");
+            float mouseXAxis = Input.GetAxis("Mouse X") * cameraSpeedX * bodyScale.x;
+            float mouseYAxis = Input.GetAxis("Mouse Y") * cameraSpeedY * bodyScale.y;
 
             //Debug.Log("Mouse Right Button Down X Axis " + mouseXAxis + " Y Axis " + mouseYAxis);
 
