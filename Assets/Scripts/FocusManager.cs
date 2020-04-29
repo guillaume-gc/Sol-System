@@ -31,6 +31,10 @@ public class FocusManager : MonoBehaviour
             currentBodyCamRef = defaultBodyCamref;
             currentBody = defaultBody;
         }
+        else
+        {
+            isFocused = false;
+        }
     }
 
     // Update is called once per frame
